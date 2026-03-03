@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculatrice Scientifique</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="calculator" aria-label="Calculatrice scientifique">
+        <header class="calc-header">
+          <h1>Calculatrice Scientifique</h1>
+          <p>Mode radians • Interface responsive</p>
+        </header>
+
+        <div class="display-wrap">
+          <label for="display" class="sr-only">Affichage</label>
+          <input id="display" class="display" type="text" inputmode="none" readonly />
+        </div>
+
+        <div class="buttons" role="group" aria-label="Boutons de calcul">
+          <button data-action="clear" class="btn fn danger">AC</button>
+          <button data-action="delete" class="btn fn">DEL</button>
+          <button data-action="insert" data-value="(" class="btn fn">(</button>
+          <button data-action="insert" data-value=")" class="btn fn">)</button>
+          <button data-action="insert" data-value="/" class="btn op">÷</button>
+
+          <button data-action="func" data-func="sin" class="btn fn">sin</button>
+          <button data-action="func" data-func="cos" class="btn fn">cos</button>
+          <button data-action="func" data-func="tan" class="btn fn">tan</button>
+          <button data-action="func" data-func="sqrt" class="btn fn">√</button>
+          <button data-action="insert" data-value="*" class="btn op">×</button>
+
+          <button data-action="func" data-func="log" class="btn fn">log</button>
+          <button data-action="func" data-func="ln" class="btn fn">ln</button>
+          <button data-action="insert" data-value="^" class="btn fn">xʸ</button>
+          <button data-action="insert" data-value="%" class="btn fn">%</button>
+          <button data-action="insert" data-value="-" class="btn op">−</button>
+
+          <button data-action="insert" data-value="7" class="btn num">7</button>
+          <button data-action="insert" data-value="8" class="btn num">8</button>
+          <button data-action="insert" data-value="9" class="btn num">9</button>
+          <button data-action="const" data-value="Math.PI" class="btn fn">π</button>
+          <button data-action="insert" data-value="+" class="btn op">+</button>
+
+          <button data-action="insert" data-value="4" class="btn num">4</button>
+          <button data-action="insert" data-value="5" class="btn num">5</button>
+          <button data-action="insert" data-value="6" class="btn num">6</button>
+          <button data-action="const" data-value="Math.E" class="btn fn">e</button>
+          <button data-action="equals" class="btn eq" rowspan="2">=</button>
+
+          <button data-action="insert" data-value="1" class="btn num">1</button>
+          <button data-action="insert" data-value="2" class="btn num">2</button>
+          <button data-action="insert" data-value="3" class="btn num">3</button>
+          <button data-action="insert" data-value="00" class="btn num">00</button>
+
+          <button data-action="insert" data-value="0" class="btn num wide">0</button>
+          <button data-action="insert" data-value="." class="btn num">.</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
