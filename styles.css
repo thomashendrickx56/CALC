@@ -76,8 +76,15 @@ body {
 .game-thumb { height: 116px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.15); }
 .thumb-cps { background: radial-gradient(circle at 30% 20%, #6ee7ff, #2563eb 55%, #111b4f); }
 .thumb-space { background: linear-gradient(130deg, #7c3aed, #2563eb, #06b6d4); }
-.thumb-flappy { background: linear-gradient(130deg, #16a34a, #059669, #0f172a); }
+.thumb-snake { background: linear-gradient(130deg, #16a34a, #059669, #0f172a); }
 .play-btn { width: 100%; margin-top: auto; }
+
+.snake-controls {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0.7rem 0;
+}
 
 .workspace-top, .duration-picker, .secret-actions, .modal-actions {
   display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0.8rem 0;
@@ -94,7 +101,7 @@ body {
 }
 .final-score { margin-top: 0.75rem; font-weight: 700; }
 .flappy-shell { margin: 0.75rem 0; width: 100%; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.15); }
-#flappy-canvas { width: 100%; height: auto; display: block; background: #091026; }
+#snake-canvas { width: 100%; height: auto; display: block; background: #091026; }
 
 .result-modal {
   position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center;

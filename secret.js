@@ -10,7 +10,7 @@ const gameCards = Array.from(document.querySelectorAll('.game-card'));
 const panels = {
   cps: document.getElementById('game-cps'),
   space: document.getElementById('game-space'),
-  flappy: document.getElementById('game-flappy')
+  snake: document.getElementById('game-snake')
 };
 
 const durationButtons = Array.from(document.querySelectorAll('.duration-btn'));
@@ -29,9 +29,7 @@ const modalBackMenu = document.getElementById('modal-back-menu');
 
 const setActiveGame = (game) => {
   gameCards.forEach((card) => card.classList.toggle('active', card.dataset.card === game));
-  Object.entries(panels).forEach(([key, panel]) => {
-    panel.classList.toggle('hidden', key !== game);
-  });
+  Object.entries(panels).forEach(([key, panel]) => panel.classList.toggle('hidden', key !== game));
 };
 
 const showCatalog = () => {
@@ -60,32 +58,7 @@ const closeResultModal = () => {
   modalOpen = false;
 };
 
-durationButtons.forEach((button) => {
-  button.addEventListener('click', () => {
-    if (!secretOpen || modalOpen) return;
-    const mode = button.dataset.mode;
-    durations[mode] = Number(button.dataset.duration);
-    durationButtons
-      .filter((candidate) => candidate.dataset.mode === mode)
-      .forEach((candidate) => candidate.classList.toggle('active', candidate === button));
-    resetMode(mode);
-  });
-});
-
-playButtons.forEach((button) => {
-  button.addEventListener('click', () => {
-    if (!secretOpen || modalOpen) return;
-    const game = button.dataset.play;
-    setActiveGame(game);
-    showWorkspace();
-  });
-});
-
-backToCatalogBtn.addEventListener('click', () => {
-  if (!secretOpen || modalOpen) return;
-  showCatalog();
-});
-
+// CPS
 const cpsArea = document.getElementById('cps-area');
 const cpsClicksEl = document.getElementById('cps-clicks');
 const cpsRateEl = document.getElementById('cps-rate');
@@ -96,7 +69,6 @@ let cpsState = null;
 
 const resetCps = () => {
   clearInterval(cpsTimer);
-  cpsTimer = null;
   cpsState = null;
   cpsClicksEl.textContent = '0';
   cpsRateEl.textContent = '0.00';
@@ -106,17 +78,15 @@ const resetCps = () => {
 
 const startCpsIfNeeded = () => {
   if (cpsState || modalOpen) return;
-  cpsState = { clicks: 0, remaining: durations.cps, elapsed: 0 };
+  cpsState = { clicks: 0, elapsed: 0 };
   cpsFinalEl.textContent = 'GO !';
-  cpsTimeEl.textContent = cpsState.remaining.toFixed(1);
   cpsTimer = setInterval(() => {
     if (!cpsState) return;
     cpsState.elapsed += 0.1;
-    cpsState.remaining = Math.max(0, durations.cps - cpsState.elapsed);
-    cpsTimeEl.textContent = cpsState.remaining.toFixed(1);
-    if (cpsState.remaining <= 0) {
+    const remain = Math.max(0, durations.cps - cpsState.elapsed);
+    cpsTimeEl.textContent = remain.toFixed(1);
+    if (remain <= 0) {
       clearInterval(cpsTimer);
-      cpsTimer = null;
       const actions = cpsState.clicks;
       const score = actions / durations.cps;
       cpsFinalEl.textContent = `Terminé : ${actions} clics • CPS ${score.toFixed(2)}`;
@@ -135,6 +105,7 @@ cpsArea.addEventListener('click', () => {
   cpsRateEl.textContent = (cpsState.clicks / Math.max(cpsState.elapsed, 0.1)).toFixed(2);
 });
 
+// SPACE
 const spaceFocusBtn = document.getElementById('space-focus');
 const spacePressesEl = document.getElementById('space-presses');
 const spaceRateEl = document.getElementById('space-rate');
@@ -146,7 +117,6 @@ let spaceState = null;
 
 const resetSpace = () => {
   clearInterval(spaceTimer);
-  spaceTimer = null;
   spaceState = null;
   spaceArmed = false;
   spacePressesEl.textContent = '0';
@@ -164,17 +134,15 @@ spaceFocusBtn.addEventListener('click', () => {
 
 const startSpaceIfNeeded = () => {
   if (spaceState || modalOpen) return;
-  spaceState = { presses: 0, remaining: durations.space, elapsed: 0 };
+  spaceState = { presses: 0, elapsed: 0 };
   spaceFinalEl.textContent = 'GO !';
-  spaceTimeEl.textContent = spaceState.remaining.toFixed(1);
   spaceTimer = setInterval(() => {
     if (!spaceState) return;
     spaceState.elapsed += 0.1;
-    spaceState.remaining = Math.max(0, durations.space - spaceState.elapsed);
-    spaceTimeEl.textContent = spaceState.remaining.toFixed(1);
-    if (spaceState.remaining <= 0) {
+    const remain = Math.max(0, durations.space - spaceState.elapsed);
+    spaceTimeEl.textContent = remain.toFixed(1);
+    if (remain <= 0) {
       clearInterval(spaceTimer);
-      spaceTimer = null;
       const actions = spaceState.presses;
       const score = actions / durations.space;
       spaceFinalEl.textContent = `Terminé : ${actions} appuis • APS ${score.toFixed(2)}`;
@@ -186,61 +154,146 @@ const startSpaceIfNeeded = () => {
   }, 100);
 };
 
-const canvas = document.getElementById('flappy-canvas');
-const ctx = canvas.getContext('2d');
-const flappyStartBtn = document.getElementById('flappy-start');
-const flappyScoreEl = document.getElementById('flappy-score');
-const flappyBestEl = document.getElementById('flappy-best');
-let flappyRunning = false;
-let flappyAnimation = null;
-let bird;
-let pipes;
-let flappyScore;
+// SNAKE (replacement for flappy)
+const snakeCanvas = document.getElementById('snake-canvas');
+const snakeCtx = snakeCanvas.getContext('2d');
+const snakeStartBtn = document.getElementById('snake-start');
+const snakeScoreEl = document.getElementById('snake-score');
+const snakeBestEl = document.getElementById('snake-best');
+const snakeDirBtns = Array.from(document.querySelectorAll('.snake-dir'));
 
-const getFlappyBest = () => Number(localStorage.getItem('secret_flappy_best') || 0);
-const setFlappyBest = (value) => localStorage.setItem('secret_flappy_best', String(value));
-const resetFlappyState = () => { bird = { x: 110, y: 160, vy: 0, r: 12 }; pipes = []; flappyScore = 0; flappyScoreEl.textContent = '0'; };
-const spawnPipe = () => { const gap = 95; const topHeight = 40 + Math.random() * 160; pipes.push({ x: canvas.width + 20, top: topHeight, bottom: topHeight + gap, passed: false }); };
-const drawFlappy = () => {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = '#091026'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = '#5be27a'; pipes.forEach((pipe) => { ctx.fillRect(pipe.x, 0, 45, pipe.top); ctx.fillRect(pipe.x, pipe.bottom, 45, canvas.height - pipe.bottom); });
-  ctx.fillStyle = '#ffd166'; ctx.beginPath(); ctx.arc(bird.x, bird.y, bird.r, 0, Math.PI * 2); ctx.fill();
+const GRID = 20;
+const COLS = Math.floor(snakeCanvas.width / GRID);
+const ROWS = Math.floor(snakeCanvas.height / GRID);
+let snakeLoop = null;
+let snakeRunning = false;
+let snake;
+let food;
+let direction;
+let nextDirection;
+let snakeScore;
+
+const getSnakeBest = () => Number(localStorage.getItem('secret_snake_best') || 0);
+const setSnakeBest = (value) => localStorage.setItem('secret_snake_best', String(value));
+
+const spawnFood = () => {
+  while (true) {
+    const candidate = { x: Math.floor(Math.random() * COLS), y: Math.floor(Math.random() * ROWS) };
+    if (!snake.some((part) => part.x === candidate.x && part.y === candidate.y)) {
+      return candidate;
+    }
+  }
 };
-const stopFlappy = () => {
-  flappyRunning = false;
-  if (flappyAnimation) { cancelAnimationFrame(flappyAnimation); flappyAnimation = null; }
-  const best = getFlappyBest();
-  if (flappyScore > best) { setFlappyBest(flappyScore); flappyBestEl.textContent = String(flappyScore); }
-  flappyStartBtn.textContent = 'Rejouer Flappy';
+
+const resetSnake = () => {
+  snake = [
+    { x: 8, y: 9 },
+    { x: 7, y: 9 },
+    { x: 6, y: 9 }
+  ];
+  direction = 'right';
+  nextDirection = 'right';
+  snakeScore = 0;
+  snakeScoreEl.textContent = '0';
+  food = spawnFood();
 };
-const flappyLoop = () => {
-  if (!flappyRunning) return;
-  bird.vy += 0.35; bird.y += bird.vy;
-  if (Math.random() < 0.018) spawnPipe();
-  pipes.forEach((pipe) => {
-    pipe.x -= 2.6;
-    if (!pipe.passed && pipe.x + 45 < bird.x) { pipe.passed = true; flappyScore += 1; flappyScoreEl.textContent = String(flappyScore); }
-    const hitX = bird.x + bird.r > pipe.x && bird.x - bird.r < pipe.x + 45;
-    const hitY = bird.y - bird.r < pipe.top || bird.y + bird.r > pipe.bottom;
-    if (hitX && hitY) stopFlappy();
+
+const drawSnakeScene = () => {
+  snakeCtx.fillStyle = '#0a122f';
+  snakeCtx.fillRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+
+  snakeCtx.fillStyle = '#1e2d69';
+  for (let x = 0; x < COLS; x += 1) {
+    for (let y = 0; y < ROWS; y += 1) {
+      if ((x + y) % 2 === 0) {
+        snakeCtx.fillRect(x * GRID, y * GRID, GRID, GRID);
+      }
+    }
+  }
+
+  snakeCtx.fillStyle = '#ef4444';
+  snakeCtx.beginPath();
+  snakeCtx.arc(food.x * GRID + GRID / 2, food.y * GRID + GRID / 2, GRID / 2.7, 0, Math.PI * 2);
+  snakeCtx.fill();
+
+  snake.forEach((part, idx) => {
+    snakeCtx.fillStyle = idx === 0 ? '#f8fafc' : '#22c55e';
+    snakeCtx.fillRect(part.x * GRID + 1, part.y * GRID + 1, GRID - 2, GRID - 2);
   });
-  pipes = pipes.filter((pipe) => pipe.x > -60);
-  if (bird.y + bird.r >= canvas.height || bird.y - bird.r <= 0) stopFlappy();
-  drawFlappy(); flappyAnimation = requestAnimationFrame(flappyLoop);
 };
-const flap = () => { if (!flappyRunning || !secretOpen || modalOpen) return; bird.vy = -5.7; };
 
-flappyStartBtn.addEventListener('click', () => {
-  if (!secretOpen || modalOpen) return;
-  setActiveGame('flappy');
-  showWorkspace();
-  resetFlappyState(); flappyRunning = true; flappyStartBtn.textContent = 'En cours...'; drawFlappy(); flappyLoop();
+const setDirection = (dir) => {
+  if (!snakeRunning) return;
+  const opposite = {
+    up: 'down',
+    down: 'up',
+    left: 'right',
+    right: 'left'
+  };
+  if (opposite[direction] !== dir) {
+    nextDirection = dir;
+  }
+};
+
+const stopSnake = () => {
+  snakeRunning = false;
+  clearInterval(snakeLoop);
+  snakeStartBtn.textContent = 'Rejouer Snake';
+  const best = getSnakeBest();
+  if (snakeScore > best) {
+    setSnakeBest(snakeScore);
+    snakeBestEl.textContent = String(snakeScore);
+  }
+};
+
+const tickSnake = () => {
+  direction = nextDirection;
+  const head = { ...snake[0] };
+  if (direction === 'up') head.y -= 1;
+  if (direction === 'down') head.y += 1;
+  if (direction === 'left') head.x -= 1;
+  if (direction === 'right') head.x += 1;
+
+  const hitWall = head.x < 0 || head.y < 0 || head.x >= COLS || head.y >= ROWS;
+  const hitSelf = snake.some((part) => part.x === head.x && part.y === head.y);
+  if (hitWall || hitSelf) {
+    stopSnake();
+    return;
+  }
+
+  snake.unshift(head);
+  if (head.x === food.x && head.y === food.y) {
+    snakeScore += 1;
+    snakeScoreEl.textContent = String(snakeScore);
+    food = spawnFood();
+  } else {
+    snake.pop();
+  }
+  drawSnakeScene();
+};
+
+snakeDirBtns.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    if (!secretOpen || modalOpen) return;
+    setDirection(btn.dataset.dir);
+  });
 });
-canvas.addEventListener('click', flap);
+
+snakeStartBtn.addEventListener('click', () => {
+  if (!secretOpen || modalOpen) return;
+  setActiveGame('snake');
+  showWorkspace();
+  resetSnake();
+  drawSnakeScene();
+  clearInterval(snakeLoop);
+  snakeRunning = true;
+  snakeStartBtn.textContent = 'En cours...';
+  snakeLoop = setInterval(tickSnake, 120);
+});
 
 document.addEventListener('keydown', (event) => {
   if (!secretOpen || modalOpen) return;
+
   if (event.key === ' ') {
     if (spaceArmed || spaceState) {
       event.preventDefault();
@@ -251,7 +304,18 @@ document.addEventListener('keydown', (event) => {
         spaceRateEl.textContent = (spaceState.presses / Math.max(spaceState.elapsed, 0.1)).toFixed(2);
       }
     }
-    flap();
+  }
+
+  const keyMap = {
+    ArrowUp: 'up',
+    ArrowDown: 'down',
+    ArrowLeft: 'left',
+    ArrowRight: 'right'
+  };
+  const mapped = keyMap[event.key];
+  if (mapped) {
+    event.preventDefault();
+    setDirection(mapped);
   }
 });
 
@@ -259,6 +323,31 @@ const resetMode = (mode) => {
   if (mode === 'cps') resetCps();
   if (mode === 'space') resetSpace();
 };
+
+durationButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    if (!secretOpen || modalOpen) return;
+    const mode = button.dataset.mode;
+    durations[mode] = Number(button.dataset.duration);
+    durationButtons
+      .filter((candidate) => candidate.dataset.mode === mode)
+      .forEach((candidate) => candidate.classList.toggle('active', candidate === button));
+    resetMode(mode);
+  });
+});
+
+playButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    if (!secretOpen || modalOpen) return;
+    setActiveGame(button.dataset.play);
+    showWorkspace();
+  });
+});
+
+backToCatalogBtn.addEventListener('click', () => {
+  if (!secretOpen || modalOpen) return;
+  showCatalog();
+});
 
 modalReplay.addEventListener('click', () => {
   if (!lastResult) return closeResultModal();
@@ -291,14 +380,14 @@ window.openSecretGame = () => {
   secretOpen = true;
   secretZone.classList.remove('hidden');
   calculator.classList.add('hidden');
-  flappyBestEl.textContent = String(getFlappyBest());
+  snakeBestEl.textContent = String(getSnakeBest());
   setActiveGame('cps');
   showCatalog();
   closeResultModal();
   resetCps();
   resetSpace();
-  resetFlappyState();
-  drawFlappy();
+  resetSnake();
+  drawSnakeScene();
 };
 
 const closeSecretGame = () => {
@@ -306,17 +395,18 @@ const closeSecretGame = () => {
   closeResultModal();
   clearInterval(cpsTimer);
   clearInterval(spaceTimer);
+  clearInterval(snakeLoop);
+  snakeRunning = false;
   cpsState = null;
   spaceState = null;
   spaceArmed = false;
-  stopFlappy();
   secretZone.classList.add('hidden');
   calculator.classList.remove('hidden');
 };
 
 closeSecretBtn.addEventListener('click', closeSecretGame);
-flappyBestEl.textContent = String(getFlappyBest());
+snakeBestEl.textContent = String(getSnakeBest());
 resetCps();
 resetSpace();
-resetFlappyState();
-drawFlappy();
+resetSnake();
+drawSnakeScene();

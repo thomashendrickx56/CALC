@@ -79,11 +79,11 @@
             <button class="btn op play-btn" data-play="space">Jouer</button>
           </article>
 
-          <article class="game-card" data-card="flappy">
-            <div class="game-thumb thumb-flappy" aria-hidden="true"></div>
-            <h3>Flappy Simplifié</h3>
-            <p>Évite les obstacles et fais grimper ton score.</p>
-            <button class="btn op play-btn" data-play="flappy">Jouer</button>
+          <article class="game-card" data-card="snake">
+            <div class="game-thumb thumb-snake" aria-hidden="true"></div>
+            <h3>Snake Mobile</h3>
+            <p>Mange les bonus, évite les murs et ta queue.</p>
+            <button class="btn op play-btn" data-play="snake">Jouer</button>
           </article>
         </div>
 
@@ -128,17 +128,23 @@
             <p id="space-final" class="final-score">Prêt.</p>
           </div>
 
-          <div class="game-panel hidden" id="game-flappy">
-            <h2>Flappy Bird simplifié</h2>
-            <p class="hint">Clique ou appuie espace pour voler.</p>
+          <div class="game-panel hidden" id="game-snake">
+            <h2>Snake (inspiré mobile)</h2>
+            <p class="hint">Utilise les boutons directionnels ou les flèches clavier.</p>
             <div class="scoreboard">
-              <p>Score: <strong id="flappy-score">0</strong></p>
-              <p>Meilleur: <strong id="flappy-best">0</strong></p>
+              <p>Score: <strong id="snake-score">0</strong></p>
+              <p>Meilleur: <strong id="snake-best">0</strong></p>
             </div>
             <div class="flappy-shell">
-              <canvas id="flappy-canvas" width="640" height="320" aria-label="Jeu Flappy"></canvas>
+              <canvas id="snake-canvas" width="560" height="360" aria-label="Jeu Snake"></canvas>
             </div>
-            <button class="btn eq secret-btn" id="flappy-start" type="button">Démarrer Flappy</button>
+            <div class="snake-controls" aria-label="Contrôles Snake">
+              <button class="btn fn snake-dir" data-dir="up" type="button">↑</button>
+              <button class="btn fn snake-dir" data-dir="left" type="button">←</button>
+              <button class="btn fn snake-dir" data-dir="down" type="button">↓</button>
+              <button class="btn fn snake-dir" data-dir="right" type="button">→</button>
+            </div>
+            <button class="btn eq secret-btn" id="snake-start" type="button">Démarrer Snake</button>
           </div>
         </div>
 
