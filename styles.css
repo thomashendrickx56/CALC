@@ -26,7 +26,7 @@ body {
 }
 
 .app {
-  width: min(95vw, 700px);
+  width: min(95vw, 800px);
   padding: 1rem;
 }
 
@@ -38,15 +38,17 @@ body {
   padding: 1rem;
 }
 
-.calc-header h1 {
+.calc-header h1,
+.secret-card h1 {
   margin: 0;
   font-size: clamp(1.1rem, 2.8vw, 1.5rem);
 }
 
-.calc-header p {
+.calc-header p,
+.secret-card p {
   margin: 0.35rem 0 1rem;
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: 0.92rem;
 }
 
 .display-wrap {
@@ -75,7 +77,7 @@ body {
   border: 0;
   border-radius: 12px;
   padding: 0.95rem 0.5rem;
-  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  font-size: clamp(0.88rem, 2.4vw, 1rem);
   font-weight: 600;
   color: var(--text);
   background: rgba(255, 255, 255, 0.08);
@@ -108,8 +110,36 @@ body {
   grid-column: span 2;
 }
 
-.secret-card h1 {
-  margin-top: 0;
+.secret-menu,
+.duration-picker,
+.secret-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0.8rem 0;
+}
+
+.game-tab.active,
+.duration-btn.active {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.game-panel {
+  margin-top: 0.9rem;
+  padding: 0.85rem;
+  border-radius: 14px;
+  background: rgba(5, 10, 30, 0.52);
+}
+
+.game-panel h2 {
+  margin: 0 0 0.7rem;
+  font-size: 1.05rem;
+}
+
+.hint {
+  margin: 0.4rem 0 0.8rem;
+  color: var(--muted);
 }
 
 .scoreboard {
@@ -119,39 +149,44 @@ body {
 }
 
 .scoreboard p {
-  margin: 0.4rem 0;
+  margin: 0.3rem 0;
 }
 
-.secret-actions {
-  display: flex;
-  gap: 0.7rem;
-  margin: 0.8rem 0;
+.tap-area {
+  width: 100%;
+  min-height: 120px;
+  border: 0;
+  border-radius: 12px;
+  margin-top: 0.7rem;
+  background: linear-gradient(160deg, #1f3a7f, #2f7cf6);
+  color: var(--text);
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+}
+
+.final-score {
+  margin-top: 0.75rem;
+  font-weight: 700;
+}
+
+.flappy-shell {
+  margin: 0.75rem 0;
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+#flappy-canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #091026;
 }
 
 .secret-btn {
   grid-row: auto;
-}
-
-.arena {
-  margin-top: 1rem;
-  height: min(55vh, 420px);
-  border-radius: 16px;
-  position: relative;
-  overflow: hidden;
-  background: rgba(4, 9, 28, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.target {
-  position: absolute;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  border: 0;
-  background: radial-gradient(circle at 30% 30%, #ffffff, #ff7c7c);
-  box-shadow: 0 0 20px rgba(255, 124, 124, 0.8);
-  cursor: pointer;
-  transform: translate(-50%, -50%);
 }
 
 .hidden {
@@ -170,13 +205,13 @@ body {
   border: 0;
 }
 
-@media (max-width: 520px) {
+@media (max-width: 640px) {
   .calculator,
   .secret-card {
     padding: 0.85rem;
   }
 
   .btn {
-    padding: 0.85rem 0.35rem;
+    padding: 0.82rem 0.35rem;
   }
 }

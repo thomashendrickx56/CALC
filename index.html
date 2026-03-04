@@ -61,18 +61,67 @@
       </section>
 
       <section class="secret-card hidden" id="secret-zone" aria-label="Zone secrète">
-        <h1>🎯 Zone Secrète : Jeu de réflexes</h1>
-        <p>Clique sur la cible le plus vite possible pendant 20 secondes.</p>
-        <div class="scoreboard">
-          <p>Score: <strong id="score">0</strong></p>
-          <p>Temps: <strong id="time">20</strong>s</p>
-          <p>Meilleur score: <strong id="best">0</strong></p>
+        <h1>🕹️ Zone Secrète : Arcade</h1>
+        <p>Débloquée uniquement avec le code <strong>67676767</strong>.</p>
+
+        <div class="secret-menu" role="group" aria-label="Menu de jeux">
+          <button class="btn fn game-tab active" data-game="cps">Jeu CPS</button>
+          <button class="btn fn game-tab" data-game="space">Vitesse Espace</button>
+          <button class="btn fn game-tab" data-game="flappy">Flappy Simplifié</button>
         </div>
+
+        <div class="game-panel" id="game-cps">
+          <h2>Jeu de CPS (Clicks Per Second)</h2>
+          <div class="duration-picker" role="group" aria-label="Durée CPS">
+            <button class="btn fn duration-btn active" data-mode="cps" data-duration="1">1s</button>
+            <button class="btn fn duration-btn" data-mode="cps" data-duration="2">2s</button>
+            <button class="btn fn duration-btn" data-mode="cps" data-duration="5">5s</button>
+            <button class="btn fn duration-btn" data-mode="cps" data-duration="10">10s</button>
+          </div>
+          <p class="hint">Le chrono démarre au premier clic sur la zone.</p>
+          <div class="scoreboard">
+            <p>Clics: <strong id="cps-clicks">0</strong></p>
+            <p>CPS: <strong id="cps-rate">0.00</strong></p>
+            <p>Temps: <strong id="cps-time">0.0</strong>s</p>
+          </div>
+          <button class="tap-area" id="cps-area" type="button">Clique ici très vite !</button>
+          <p id="cps-final" class="final-score">Prêt.</p>
+        </div>
+
+        <div class="game-panel hidden" id="game-space">
+          <h2>Jeu de vitesse (Barre espace)</h2>
+          <div class="duration-picker" role="group" aria-label="Durée espace">
+            <button class="btn fn duration-btn active" data-mode="space" data-duration="1">1s</button>
+            <button class="btn fn duration-btn" data-mode="space" data-duration="2">2s</button>
+            <button class="btn fn duration-btn" data-mode="space" data-duration="5">5s</button>
+            <button class="btn fn duration-btn" data-mode="space" data-duration="10">10s</button>
+          </div>
+          <p class="hint">Appuie sur espace : le test démarre au premier appui.</p>
+          <div class="scoreboard">
+            <p>Appuis: <strong id="space-presses">0</strong></p>
+            <p>APS: <strong id="space-rate">0.00</strong></p>
+            <p>Temps: <strong id="space-time">0.0</strong>s</p>
+          </div>
+          <button class="btn op" id="space-focus" type="button">Activer le mode espace</button>
+          <p id="space-final" class="final-score">Prêt.</p>
+        </div>
+
+        <div class="game-panel hidden" id="game-flappy">
+          <h2>Flappy Bird simplifié</h2>
+          <p class="hint">Clique ou appuie espace pour voler.</p>
+          <div class="scoreboard">
+            <p>Score: <strong id="flappy-score">0</strong></p>
+            <p>Meilleur: <strong id="flappy-best">0</strong></p>
+          </div>
+          <div class="flappy-shell">
+            <canvas id="flappy-canvas" width="640" height="320" aria-label="Jeu Flappy"></canvas>
+          </div>
+          <button class="btn eq secret-btn" id="flappy-start" type="button">Démarrer Flappy</button>
+        </div>
+
         <div class="secret-actions">
-          <button id="start" class="btn eq secret-btn">Démarrer</button>
-          <button id="close-secret" class="btn fn">Fermer</button>
+          <button id="close-secret" class="btn fn">Fermer la zone secrète</button>
         </div>
-        <div class="arena" id="arena" aria-label="Zone de jeu"></div>
       </section>
     </main>
 
