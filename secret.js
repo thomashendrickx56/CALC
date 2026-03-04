@@ -10,9 +10,18 @@ const panels = {
 };
 
 const durationButtons = Array.from(document.querySelectorAll('.duration-btn'));
-
 const durations = { cps: 1, space: 1 };
 let secretOpen = false;
+let modalOpen = false;
+let lastResult = null;
+
+const resultModal = document.getElementById('result-modal');
+const modalDuration = document.getElementById('modal-duration');
+const modalActions = document.getElementById('modal-actions');
+const modalScore = document.getElementById('modal-score');
+const modalReplay = document.getElementById('modal-replay');
+const modalChangeMode = document.getElementById('modal-change-mode');
+const modalBackMenu = document.getElementById('modal-back-menu');
 
 const setActiveGame = (game) => {
   tabs.forEach((tab) => tab.classList.toggle('active', tab.dataset.game === game));
@@ -21,8 +30,28 @@ const setActiveGame = (game) => {
   });
 };
 
+const openResultModal = ({ mode, duration, actions, score }) => {
+  lastResult = { mode, duration, actions, score };
+  modalDuration.textContent = `${duration}s`;
+  modalActions.textContent = String(actions);
+  modalScore.textContent = score.toFixed(2);
+  resultModal.classList.remove('hidden');
+  resultModal.setAttribute('aria-hidden', 'false');
+  modalOpen = true;
+};
+
+const closeResultModal = () => {
+  resultModal.classList.add('hidden');
+  resultModal.setAttribute('aria-hidden', 'true');
+  modalOpen = false;
+};
+
 durationButtons.forEach((button) => {
   button.addEventListener('click', () => {
+    if (!secretOpen || modalOpen) {
+      return;
+    }
+
     const mode = button.dataset.mode;
     const value = Number(button.dataset.duration);
     durations[mode] = value;
@@ -36,7 +65,12 @@ durationButtons.forEach((button) => {
 });
 
 tabs.forEach((tab) => {
-  tab.addEventListener('click', () => setActiveGame(tab.dataset.game));
+  tab.addEventListener('click', () => {
+    if (!secretOpen || modalOpen) {
+      return;
+    }
+    setActiveGame(tab.dataset.game);
+  });
 });
 
 // CPS game
@@ -60,7 +94,7 @@ const resetCps = () => {
 };
 
 const startCpsIfNeeded = () => {
-  if (cpsState) {
+  if (cpsState || modalOpen) {
     return;
   }
 
@@ -74,6 +108,12 @@ const startCpsIfNeeded = () => {
   cpsTimeEl.textContent = cpsState.remaining.toFixed(1);
 
   cpsTimer = setInterval(() => {
+    if (!cpsState) {
+      clearInterval(cpsTimer);
+      cpsTimer = null;
+      return;
+    }
+
     cpsState.elapsed += 0.1;
     cpsState.remaining = Math.max(0, durations.cps - cpsState.elapsed);
     cpsTimeEl.textContent = cpsState.remaining.toFixed(1);
@@ -81,15 +121,17 @@ const startCpsIfNeeded = () => {
     if (cpsState.remaining <= 0) {
       clearInterval(cpsTimer);
       cpsTimer = null;
-      const cps = cpsState.clicks / durations.cps;
-      cpsFinalEl.textContent = `Terminé : ${cpsState.clicks} clics • CPS ${cps.toFixed(2)}`;
+      const actions = cpsState.clicks;
+      const score = actions / durations.cps;
+      cpsFinalEl.textContent = `Terminé : ${actions} clics • CPS ${score.toFixed(2)}`;
       cpsState = null;
+      openResultModal({ mode: 'cps', duration: durations.cps, actions, score });
     }
   }, 100);
 };
 
 cpsArea.addEventListener('click', () => {
-  if (!secretOpen) {
+  if (!secretOpen || modalOpen) {
     return;
   }
 
@@ -129,7 +171,7 @@ const resetSpace = () => {
 };
 
 spaceFocusBtn.addEventListener('click', () => {
-  if (!secretOpen) {
+  if (!secretOpen || modalOpen) {
     return;
   }
 
@@ -138,7 +180,7 @@ spaceFocusBtn.addEventListener('click', () => {
 });
 
 const startSpaceIfNeeded = () => {
-  if (spaceState) {
+  if (spaceState || modalOpen) {
     return;
   }
 
@@ -152,6 +194,12 @@ const startSpaceIfNeeded = () => {
   spaceTimeEl.textContent = spaceState.remaining.toFixed(1);
 
   spaceTimer = setInterval(() => {
+    if (!spaceState) {
+      clearInterval(spaceTimer);
+      spaceTimer = null;
+      return;
+    }
+
     spaceState.elapsed += 0.1;
     spaceState.remaining = Math.max(0, durations.space - spaceState.elapsed);
     spaceTimeEl.textContent = spaceState.remaining.toFixed(1);
@@ -159,11 +207,13 @@ const startSpaceIfNeeded = () => {
     if (spaceState.remaining <= 0) {
       clearInterval(spaceTimer);
       spaceTimer = null;
-      const aps = spaceState.presses / durations.space;
-      spaceFinalEl.textContent = `Terminé : ${spaceState.presses} appuis • APS ${aps.toFixed(2)}`;
+      const actions = spaceState.presses;
+      const score = actions / durations.space;
+      spaceFinalEl.textContent = `Terminé : ${actions} appuis • APS ${score.toFixed(2)}`;
       spaceState = null;
       spaceArmed = false;
       spaceFocusBtn.textContent = 'Activer le mode espace';
+      openResultModal({ mode: 'space', duration: durations.space, actions, score });
     }
   }, 100);
 };
@@ -266,14 +316,14 @@ const flappyLoop = () => {
 };
 
 const flap = () => {
-  if (!flappyRunning || !secretOpen) {
+  if (!flappyRunning || !secretOpen || modalOpen) {
     return;
   }
   bird.vy = -5.7;
 };
 
 flappyStartBtn.addEventListener('click', () => {
-  if (!secretOpen) {
+  if (!secretOpen || modalOpen) {
     return;
   }
   resetFlappyState();
@@ -286,7 +336,7 @@ flappyStartBtn.addEventListener('click', () => {
 canvas.addEventListener('click', flap);
 
 document.addEventListener('keydown', (event) => {
-  if (!secretOpen) {
+  if (!secretOpen || modalOpen) {
     return;
   }
 
@@ -315,12 +365,47 @@ const resetMode = (mode) => {
   }
 };
 
+modalReplay.addEventListener('click', () => {
+  if (!lastResult) {
+    closeResultModal();
+    return;
+  }
+
+  closeResultModal();
+  setActiveGame(lastResult.mode);
+  resetMode(lastResult.mode);
+
+  if (lastResult.mode === 'space') {
+    spaceArmed = true;
+    spaceFocusBtn.textContent = 'Mode actif : appuie sur Espace';
+  }
+});
+
+modalChangeMode.addEventListener('click', () => {
+  if (!lastResult) {
+    closeResultModal();
+    return;
+  }
+
+  closeResultModal();
+  setActiveGame(lastResult.mode);
+  resetMode(lastResult.mode);
+});
+
+modalBackMenu.addEventListener('click', () => {
+  closeResultModal();
+  setActiveGame('cps');
+  resetCps();
+  resetSpace();
+});
+
 window.openSecretGame = () => {
   secretOpen = true;
   secretZone.classList.remove('hidden');
   calculator.classList.add('hidden');
   flappyBestEl.textContent = String(getFlappyBest());
   setActiveGame('cps');
+  closeResultModal();
   resetCps();
   resetSpace();
   resetFlappyState();
@@ -329,8 +414,12 @@ window.openSecretGame = () => {
 
 const closeSecretGame = () => {
   secretOpen = false;
+  closeResultModal();
   clearInterval(cpsTimer);
   clearInterval(spaceTimer);
+  cpsState = null;
+  spaceState = null;
+  spaceArmed = false;
   stopFlappy();
   secretZone.classList.add('hidden');
   calculator.classList.remove('hidden');

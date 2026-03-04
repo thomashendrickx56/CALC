@@ -125,6 +125,20 @@
       </section>
     </main>
 
+    <div class="result-modal hidden" id="result-modal" aria-hidden="true">
+      <div class="result-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <h2 id="modal-title">Résultat</h2>
+        <p>Durée choisie: <strong id="modal-duration">0s</strong></p>
+        <p>Actions totales: <strong id="modal-actions">0</strong></p>
+        <p>Score final: <strong id="modal-score">0.00</strong></p>
+        <div class="modal-actions">
+          <button class="btn eq" id="modal-replay" type="button">Rejouer</button>
+          <button class="btn fn" id="modal-change-mode" type="button">Changer de mode</button>
+          <button class="btn fn" id="modal-back-menu" type="button">Retour menu jeux</button>
+        </div>
+      </div>
+    </div>
+
     <script src="script.js"></script>
     <script src="secret.js"></script>
   </body>
