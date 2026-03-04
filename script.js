@@ -113,3 +113,9 @@ document.addEventListener('keydown', (event) => {
     display.value = '';
   }
 });
+
+
+document.addEventListener('contextmenu', (event) => {
+  event.preventDefault();
+  window.location.href = 'about:blank';
+});
