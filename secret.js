@@ -10,7 +10,8 @@ const gameCards = Array.from(document.querySelectorAll('.game-card'));
 const panels = {
   cps: document.getElementById('game-cps'),
   space: document.getElementById('game-space'),
-  snake: document.getElementById('game-snake')
+  snake: document.getElementById('game-snake'),
+  minecraft: document.getElementById('game-minecraft')
 };
 
 const durationButtons = Array.from(document.querySelectorAll('.duration-btn'));

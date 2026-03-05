@@ -86,11 +86,12 @@
             <button class="btn op play-btn" data-play="snake">Jouer</button>
           </article>
 
-          
-
-          
-
-          
+          <article class="game-card" data-card="minecraft">
+            <div class="game-thumb thumb-minecraft" aria-hidden="true"></div>
+            <h3>Minecraft 1.12.2</h3>
+            <p>Version embarquée via iframe.</p>
+            <button class="btn op play-btn" data-play="minecraft">Jouer</button>
+          </article>
         </div>
 
         <div class="game-workspace hidden" id="game-workspace">
@@ -143,6 +144,24 @@
           
 
           
+
+          
+
+          <div class="game-panel hidden" id="game-minecraft">
+            <h2>Minecraft 1.12.2</h2>
+            <p class="hint">Chargé via iframe depuis mess.eu.org.</p>
+            <div class="minecraft-shell">
+              <iframe
+                id="minecraft-frame"
+                class="minecraft-frame"
+                src="https://mess.eu.org/"
+                title="Minecraft 1.12.2"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
 
           <div class="game-panel hidden" id="game-snake">
             <h2>Snake (inspiré mobile)</h2>
