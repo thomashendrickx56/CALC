@@ -99,6 +99,13 @@
             <p>Aligne 3 symboles avant l’IA.</p>
             <button class="btn op play-btn" data-play="tictactoe">Jouer</button>
           </article>
+
+          <article class="game-card" data-card="chess">
+            <div class="game-thumb thumb-chess" aria-hidden="true"></div>
+            <h3>Chess</h3>
+            <p>Mode ami ou IA, avec promotion, roque et fin de partie.</p>
+            <button class="btn op play-btn" data-play="chess">Jouer</button>
+          </article>
         </div>
 
         <div class="game-workspace hidden" id="game-workspace">
@@ -172,6 +179,50 @@
             </div>
             <button class="btn op" id="ttt-reset" type="button">Recommencer</button>
             <p id="ttt-status" class="final-score">Ton tour.</p>
+          </div>
+
+          
+
+          <div class="game-panel hidden" id="game-chess">
+            <h2>Chess</h2>
+            <div class="chess-wrapper" id="chess-root">
+              <div id="chess-mode-screen" class="chess-mode-screen">
+                <h3>Chess</h3>
+                <p>Choisis un mode de jeu</p>
+                <div class="chess-mode-buttons">
+                  <button type="button" id="chess-vs-friend-btn" class="chess-mode-btn">👥 Vs Friend</button>
+                  <button type="button" id="chess-vs-ai-btn" class="chess-mode-btn">🤖 Vs AI</button>
+                </div>
+              </div>
+
+              <div id="chess-game-screen" class="chess-game-screen hidden">
+                <header class="chess-header">
+                  <h3>Chess</h3>
+                  <div class="chess-game-info">
+                    <span class="chess-turn-label" id="chess-turn-label">White to move</span>
+                    <span class="chess-mode-badge" id="chess-mode-badge">Vs Friend</span>
+                    <button type="button" id="chess-new-game-btn" class="btn">New Game</button>
+                    <button type="button" id="chess-change-mode-btn" class="btn">Change Mode</button>
+                  </div>
+                </header>
+
+                <main class="chess-game-container">
+                  <div id="chess-board" class="chess-board"></div>
+                  <div class="chess-promotion-overlay hidden" id="chess-promotion-overlay">
+                    <p>Promote pawn to:</p>
+                    <div class="chess-promotion-pieces" id="chess-promotion-pieces"></div>
+                  </div>
+                </main>
+
+                <div id="chess-game-over-overlay" class="chess-game-over-overlay hidden">
+                  <div class="chess-game-over-box">
+                    <h4 id="chess-game-over-title">Checkmate!</h4>
+                    <p id="chess-game-over-message"></p>
+                    <button type="button" id="chess-play-again-btn" class="btn">Play Again</button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="game-panel hidden" id="game-snake">
