@@ -85,6 +85,20 @@
             <p>Mange les bonus, évite les murs et ta queue.</p>
             <button class="btn op play-btn" data-play="snake">Jouer</button>
           </article>
+
+          <article class="game-card" data-card="rps">
+            <div class="game-thumb thumb-rps" aria-hidden="true"></div>
+            <h3>Pierre Feuille Ciseaux</h3>
+            <p>Affronte l’ordinateur en duel rapide.</p>
+            <button class="btn op play-btn" data-play="rps">Jouer</button>
+          </article>
+
+          <article class="game-card" data-card="tictactoe">
+            <div class="game-thumb thumb-ttt" aria-hidden="true"></div>
+            <h3>Morpion (Tic Tac Toe)</h3>
+            <p>Aligne 3 symboles avant l’IA.</p>
+            <button class="btn op play-btn" data-play="tictactoe">Jouer</button>
+          </article>
         </div>
 
         <div class="game-workspace hidden" id="game-workspace">
@@ -126,6 +140,38 @@
             </div>
             <button class="btn op" id="space-focus" type="button">Activer le mode espace</button>
             <p id="space-final" class="final-score">Prêt.</p>
+          </div>
+
+          
+
+          <div class="game-panel hidden" id="game-rps">
+            <h2>Pierre Feuille Ciseaux</h2>
+            <p class="hint">Choisis un symbole pour jouer contre l’ordinateur.</p>
+            <div class="rps-buttons">
+              <button class="btn fn rps-choice" data-choice="pierre" type="button">🪨 Pierre</button>
+              <button class="btn fn rps-choice" data-choice="feuille" type="button">📄 Feuille</button>
+              <button class="btn fn rps-choice" data-choice="ciseaux" type="button">✂️ Ciseaux</button>
+            </div>
+            <p id="rps-status" class="final-score">Prêt.</p>
+            <p>Score joueur: <strong id="rps-player">0</strong> • Score bot: <strong id="rps-bot">0</strong></p>
+          </div>
+
+          <div class="game-panel hidden" id="game-tictactoe">
+            <h2>Morpion (Tic Tac Toe)</h2>
+            <p class="hint">Tu joues X. L’ordinateur joue O.</p>
+            <div class="ttt-grid" id="ttt-grid">
+              <button class="ttt-cell" data-cell="0" type="button"></button>
+              <button class="ttt-cell" data-cell="1" type="button"></button>
+              <button class="ttt-cell" data-cell="2" type="button"></button>
+              <button class="ttt-cell" data-cell="3" type="button"></button>
+              <button class="ttt-cell" data-cell="4" type="button"></button>
+              <button class="ttt-cell" data-cell="5" type="button"></button>
+              <button class="ttt-cell" data-cell="6" type="button"></button>
+              <button class="ttt-cell" data-cell="7" type="button"></button>
+              <button class="ttt-cell" data-cell="8" type="button"></button>
+            </div>
+            <button class="btn op" id="ttt-reset" type="button">Recommencer</button>
+            <p id="ttt-status" class="final-score">Ton tour.</p>
           </div>
 
           <div class="game-panel hidden" id="game-snake">

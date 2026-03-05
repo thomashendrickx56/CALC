@@ -77,6 +77,8 @@ body {
 .thumb-cps { background: radial-gradient(circle at 30% 20%, #6ee7ff, #2563eb 55%, #111b4f); }
 .thumb-space { background: linear-gradient(130deg, #7c3aed, #2563eb, #06b6d4); }
 .thumb-snake { background: linear-gradient(130deg, #16a34a, #059669, #0f172a); }
+.thumb-rps { background: linear-gradient(130deg, #f97316, #ef4444, #7c2d12); }
+.thumb-ttt { background: linear-gradient(130deg, #22c55e, #0ea5e9, #1e293b); }
 .play-btn { width: 100%; margin-top: auto; }
 
 .snake-controls {
@@ -84,6 +86,32 @@ body {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.5rem;
   margin: 0.7rem 0;
+}
+
+
+.rps-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0.7rem 0;
+}
+
+.ttt-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin: 0.6rem 0;
+}
+
+.ttt-cell {
+  min-height: 68px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  background: rgba(15, 24, 54, 0.9);
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 800;
+  cursor: pointer;
 }
 
 .workspace-top, .duration-picker, .secret-actions, .modal-actions {

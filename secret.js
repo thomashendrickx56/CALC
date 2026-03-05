@@ -10,7 +10,9 @@ const gameCards = Array.from(document.querySelectorAll('.game-card'));
 const panels = {
   cps: document.getElementById('game-cps'),
   space: document.getElementById('game-space'),
-  snake: document.getElementById('game-snake')
+  snake: document.getElementById('game-snake'),
+  rps: document.getElementById('game-rps'),
+  tictactoe: document.getElementById('game-tictactoe')
 };
 
 const durationButtons = Array.from(document.querySelectorAll('.duration-btn'));
@@ -26,6 +28,131 @@ const modalScore = document.getElementById('modal-score');
 const modalReplay = document.getElementById('modal-replay');
 const modalChangeMode = document.getElementById('modal-change-mode');
 const modalBackMenu = document.getElementById('modal-back-menu');
+
+
+// RPS
+const rpsStatusEl = document.getElementById('rps-status');
+const rpsPlayerEl = document.getElementById('rps-player');
+const rpsBotEl = document.getElementById('rps-bot');
+const rpsChoices = Array.from(document.querySelectorAll('.rps-choice'));
+let rpsPlayerScore = 0;
+let rpsBotScore = 0;
+
+const resetRps = () => {
+  rpsPlayerScore = 0;
+  rpsBotScore = 0;
+  rpsPlayerEl.textContent = '0';
+  rpsBotEl.textContent = '0';
+  rpsStatusEl.textContent = 'Prêt.';
+};
+
+const beats = {
+  pierre: 'ciseaux',
+  ciseaux: 'feuille',
+  feuille: 'pierre'
+};
+
+rpsChoices.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    if (!secretOpen || modalOpen) return;
+    const user = btn.dataset.choice;
+    const options = ['pierre', 'feuille', 'ciseaux'];
+    const bot = options[Math.floor(Math.random() * options.length)];
+
+    if (user === bot) {
+      rpsStatusEl.textContent = `Égalité (${user} vs ${bot})`;
+      return;
+    }
+
+    if (beats[user] === bot) {
+      rpsPlayerScore += 1;
+      rpsPlayerEl.textContent = String(rpsPlayerScore);
+      rpsStatusEl.textContent = `Gagné ! (${user} bat ${bot})`;
+    } else {
+      rpsBotScore += 1;
+      rpsBotEl.textContent = String(rpsBotScore);
+      rpsStatusEl.textContent = `Perdu ! (${bot} bat ${user})`;
+    }
+  });
+});
+
+// Tic Tac Toe
+const tttGrid = document.getElementById('ttt-grid');
+const tttCells = Array.from(document.querySelectorAll('.ttt-cell'));
+const tttStatusEl = document.getElementById('ttt-status');
+const tttResetBtn = document.getElementById('ttt-reset');
+let tttBoard = Array(9).fill('');
+let tttOver = false;
+
+const winPatterns = [
+  [0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]
+];
+
+const checkWinner = (board, mark) => winPatterns.some((p) => p.every((i) => board[i] === mark));
+
+const renderTtt = () => {
+  tttCells.forEach((cell, i) => {
+    cell.textContent = tttBoard[i];
+    cell.disabled = tttOver || tttBoard[i] !== '';
+  });
+};
+
+const resetTtt = () => {
+  tttBoard = Array(9).fill('');
+  tttOver = false;
+  tttStatusEl.textContent = 'Ton tour.';
+  renderTtt();
+};
+
+const botMove = () => {
+  const free = tttBoard.map((v, i) => (v === '' ? i : -1)).filter((i) => i !== -1);
+  if (!free.length) return;
+  const idx = free[Math.floor(Math.random() * free.length)];
+  tttBoard[idx] = 'O';
+
+  if (checkWinner(tttBoard, 'O')) {
+    tttStatusEl.textContent = "L'ordinateur gagne.";
+    tttOver = true;
+  } else if (!tttBoard.includes('')) {
+    tttStatusEl.textContent = 'Match nul.';
+    tttOver = true;
+  } else {
+    tttStatusEl.textContent = 'Ton tour.';
+  }
+  renderTtt();
+};
+
+tttGrid.addEventListener('click', (event) => {
+  if (!secretOpen || modalOpen || tttOver) return;
+  const btn = event.target.closest('.ttt-cell');
+  if (!btn) return;
+  const idx = Number(btn.dataset.cell);
+  if (tttBoard[idx] !== '') return;
+  tttBoard[idx] = 'X';
+
+  if (checkWinner(tttBoard, 'X')) {
+    tttStatusEl.textContent = 'Tu as gagné !';
+    tttOver = true;
+    renderTtt();
+    return;
+  }
+
+  if (!tttBoard.includes('')) {
+    tttStatusEl.textContent = 'Match nul.';
+    tttOver = true;
+    renderTtt();
+    return;
+  }
+
+  tttStatusEl.textContent = "Tour de l'ordinateur...";
+  renderTtt();
+  setTimeout(botMove, 250);
+});
+
+tttResetBtn.addEventListener('click', () => {
+  if (!secretOpen || modalOpen) return;
+  resetTtt();
+});
 
 const setActiveGame = (game) => {
   gameCards.forEach((card) => card.classList.toggle('active', card.dataset.card === game));
@@ -374,6 +501,8 @@ modalBackMenu.addEventListener('click', () => {
   showCatalog();
   resetCps();
   resetSpace();
+  resetRps();
+  resetTtt();
 });
 
 window.openSecretGame = () => {
@@ -386,6 +515,8 @@ window.openSecretGame = () => {
   closeResultModal();
   resetCps();
   resetSpace();
+  resetRps();
+  resetTtt();
   resetSnake();
   drawSnakeScene();
 };
@@ -408,5 +539,7 @@ closeSecretBtn.addEventListener('click', closeSecretGame);
 snakeBestEl.textContent = String(getSnakeBest());
 resetCps();
 resetSpace();
+resetRps();
+resetTtt();
 resetSnake();
 drawSnakeScene();
