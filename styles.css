@@ -77,9 +77,6 @@ body {
 .thumb-cps { background: radial-gradient(circle at 30% 20%, #6ee7ff, #2563eb 55%, #111b4f); }
 .thumb-space { background: linear-gradient(130deg, #7c3aed, #2563eb, #06b6d4); }
 .thumb-snake { background: linear-gradient(130deg, #16a34a, #059669, #0f172a); }
-.thumb-rps { background: linear-gradient(130deg, #f97316, #ef4444, #7c2d12); }
-.thumb-ttt { background: linear-gradient(130deg, #22c55e, #0ea5e9, #1e293b); }
-.thumb-chess { background: linear-gradient(130deg, #f5d38a, #8b5e34, #1f2937); }
 .play-btn { width: 100%; margin-top: auto; }
 
 .snake-controls {
@@ -87,32 +84,6 @@ body {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.5rem;
   margin: 0.7rem 0;
-}
-
-
-.rps-buttons {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.5rem;
-  margin: 0.7rem 0;
-}
-
-.ttt-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.45rem;
-  margin: 0.6rem 0;
-}
-
-.ttt-cell {
-  min-height: 68px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  background: rgba(15, 24, 54, 0.9);
-  color: #fff;
-  font-size: 1.5rem;
-  font-weight: 800;
-  cursor: pointer;
 }
 
 .workspace-top, .duration-picker, .secret-actions, .modal-actions {
@@ -151,75 +122,4 @@ body {
 @media (max-width: 640px) {
   .calculator, .secret-card, .result-dialog { padding: 0.85rem; }
   .btn { padding: 0.82rem 0.35rem; }
-}
-
-
-.chess-wrapper {
-  width: 100%;
-  background: #1a1a2e;
-  border-radius: 12px;
-  padding: 0.75rem;
-}
-
-.chess-mode-screen { text-align: center; padding: 1rem 0.5rem; }
-.chess-mode-screen h3 { margin: 0 0 0.4rem; }
-.chess-mode-buttons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
-.chess-mode-btn {
-  padding: 0.75rem;
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.2);
-  background: #16213e;
-  color: #eee;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.chess-game-screen { display: grid; gap: 0.7rem; }
-.chess-header { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem; align-items: center; }
-.chess-game-info { display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center; }
-.chess-mode-badge { background: rgba(255,255,255,0.1); padding: 0.2rem 0.45rem; border-radius: 6px; }
-
-.chess-game-container { position: relative; display: grid; place-items: center; }
-.chess-board {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  width: min(92vw, 460px);
-  height: min(92vw, 460px);
-  max-width: 460px;
-  max-height: 460px;
-  border-radius: 8px;
-  overflow: hidden;
-}
-.chess-square { display: flex; align-items: center; justify-content: center; font-size: clamp(1.2rem, 4vw, 2.2rem); cursor: pointer; user-select: none; }
-.chess-square.light { background: #f0d9b5; color: #333; }
-.chess-square.dark { background: #b58863; color: #111; }
-.chess-square.highlight { background: rgba(255,255,0,0.35) !important; }
-.chess-square.move-target { background: rgba(0,128,0,0.35) !important; }
-.chess-square.check { background: rgba(200,0,0,0.45) !important; }
-.chess-square.last-move { outline: 2px solid rgba(255, 200, 0, 0.8); outline-offset: -2px; }
-
-.chess-promotion-overlay {
-  position: absolute; inset: 0; border-radius: 8px;
-  background: rgba(0,0,0,0.7);
-  display: grid; place-content: center; gap: 0.5rem;
-}
-.chess-promotion-pieces { display: flex; gap: 0.45rem; justify-content: center; }
-.chess-promotion-piece-btn {
-  width: 44px; height: 44px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.25);
-  background: #16213e; color: #fff; font-size: 1.6rem; cursor: pointer;
-}
-
-.chess-game-over-overlay {
-  position: absolute; inset: 0; border-radius: 8px;
-  background: rgba(0,0,0,0.82);
-  display: grid; place-items: center;
-}
-.chess-game-over-box { background: #16213e; border-radius: 12px; padding: 1rem; text-align: center; max-width: 280px; }
-
-
-.chess-game-over-overlay.hidden,
-.chess-game-screen.hidden,
-.chess-mode-screen.hidden,
-.chess-promotion-overlay.hidden {
-  display: none !important;
 }
