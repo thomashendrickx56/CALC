@@ -78,6 +78,7 @@ body {
 .thumb-space { background: linear-gradient(130deg, #7c3aed, #2563eb, #06b6d4); }
 .thumb-snake { background: linear-gradient(130deg, #16a34a, #059669, #0f172a); }
 .thumb-minecraft { background: linear-gradient(130deg, #3b6f2a, #6aa84f, #5b3a1a); }
+.thumb-subway { background: linear-gradient(130deg, #ff7a00, #ff2d55, #3a0ca3); }
 .play-btn { width: 100%; margin-top: auto; }
 
 .snake-controls {
@@ -113,6 +114,21 @@ body {
 }
 
 .minecraft-frame {
+  width: 100%;
+  height: min(70vh, 720px);
+  border: 0;
+  display: block;
+}
+
+.subway-shell {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: #000;
+}
+
+.subway-frame {
   width: 100%;
   height: min(70vh, 720px);
   border: 0;

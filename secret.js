@@ -11,7 +11,8 @@ const panels = {
   cps: document.getElementById('game-cps'),
   space: document.getElementById('game-space'),
   snake: document.getElementById('game-snake'),
-  minecraft: document.getElementById('game-minecraft')
+  minecraft: document.getElementById('game-minecraft'),
+  subway: document.getElementById('game-subway')
 };
 
 const durationButtons = Array.from(document.querySelectorAll('.duration-btn'));

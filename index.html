@@ -92,6 +92,13 @@
             <p>Version embarquée via iframe.</p>
             <button class="btn op play-btn" data-play="minecraft">Jouer</button>
           </article>
+
+          <article class="game-card" data-card="subway">
+            <div class="game-thumb thumb-subway" aria-hidden="true"></div>
+            <h3>Subway Surfer</h3>
+            <p>Version web embarquée via iframe.</p>
+            <button class="btn op play-btn" data-play="subway">Jouer</button>
+          </article>
         </div>
 
         <div class="game-workspace hidden" id="game-workspace">
@@ -156,6 +163,24 @@
                 class="minecraft-frame"
                 src="https://mess.eu.org/"
                 title="Minecraft 1.12.2"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+
+          
+
+          <div class="game-panel hidden" id="game-subway">
+            <h2>Subway Surfer</h2>
+            <p class="hint">Chargé via iframe depuis subwaysurfersonline.io.</p>
+            <div class="subway-shell">
+              <iframe
+                id="subway-frame"
+                class="subway-frame"
+                src="https://subwaysurfersonline.io/subway-surfers-rio-carnival-2025"
+                title="Subway Surfer"
                 loading="lazy"
                 referrerpolicy="no-referrer"
                 allowfullscreen
